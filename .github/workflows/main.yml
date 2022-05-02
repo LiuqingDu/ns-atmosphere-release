@@ -31,7 +31,7 @@ jobs:
           type: "stable"
       
       - name: Download and unzip Atmosphere
-        uses: schmiddim/action-wget-unzip@main
+        uses: schmiddim/action-wget-unzip@v2
         id: unzip_atmosphere
         with:
           url: ${{ steps.atmosphere_release.outputs.browser_download_url }}
@@ -54,14 +54,14 @@ jobs:
           
       # Patches
       - name: Get latest release of patches
-        uses: rez0n/actions-github-release@main
+        uses: schmiddim/action-wget-unzip@v2
         id: patches_release
         env:
           repository: "ITotalJustice/patches"
           type: "stable"
       
       - name: Download and unzip Atmosphere
-        uses: schmiddim/action-wget-unzip@main
+        uses: schmiddim/action-wget-unzip@v2
         id: unzip_patches
         with:
           url: ${{ steps.patches_release.outputs.browser_download_url }}
