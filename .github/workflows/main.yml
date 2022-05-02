@@ -73,6 +73,10 @@ jobs:
           echo ${{ steps.hekate_release.outputs.browser_download_url }}
           echo ${{ steps.patches_release.outputs.browser_download_url }}
           zip -qr ns-release.zip ns-release
+          touch CHANGELOG.log
+          echo "Atmosphere - ${{ steps.atmosphere_release.outputs.release }}">>CHANGELOG.log
+          echo "Hekate - ${{ steps.hekate_release.outputs.release }}">>CHANGELOG.log
+          echo "Patches - ${{ steps.patches_release.outputs.release }}">>CHANGELOG.log
           ls
           
       - name: GH Release
@@ -81,6 +85,6 @@ jobs:
           token: ${{ secrets.NS_ACTION }}
           tag_name: latest
           name: Development Build
-          body: Atmosphere - ${{ steps.atmosphere_release.outputs.release }}, Hekate - ${{ steps.hekate_release.outputs.release }}, Patches - ${{ steps.patches_release.outputs.release }}
+          body_path: CHANGELOG.log
           files: |
             ns-release.zip
