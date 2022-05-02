@@ -31,7 +31,7 @@ jobs:
           type: "stable"
       
       - name: Download and unzip Atmosphere
-        uses: actions/schmiddim-wget-unzip@v1
+        uses: schmiddim/action-wget-unzip@main
         id: unzip_atmosphere
         with:
           url: ${{ steps.atmosphere_release.outputs.browser_download_url }}
@@ -46,7 +46,7 @@ jobs:
           type: "stable"
       
       - name: Download and unzip Atmosphere
-        uses: actions/schmiddim-wget-unzip@v1
+        uses: schmiddim/action-wget-unzip@main
         id: unzip_hekate
         with:
           url: ${{ steps.hekate_release.outputs.browser_download_url }}
@@ -61,7 +61,7 @@ jobs:
           type: "stable"
       
       - name: Download and unzip Atmosphere
-        uses: actions/schmiddim-wget-unzip@v1
+        uses: schmiddim/action-wget-unzip@main
         id: unzip_patches
         with:
           url: ${{ steps.patches_release.outputs.browser_download_url }}
