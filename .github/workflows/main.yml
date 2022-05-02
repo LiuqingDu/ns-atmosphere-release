@@ -72,13 +72,12 @@ jobs:
           echo ${{ steps.atmosphere_release.outputs.browser_download_url }}
           echo ${{ steps.hekate_release.outputs.browser_download_url }}
           echo ${{ steps.patches_release.outputs.browser_download_url }}
-          echo ${{ secrets.ns-action }}
-          ls
-          zip -r ns-release.zip ns-release
+          echo ${{ secrets.NS_ACTION }}
+          zip -qr ns-release.zip ns-release
           
       - name: Upload to release
-        uses: JasonEtco/upload-to-release@master
+        uses: JasonEtco/upload-to-release@v0.1.1
         with:
-          args: ns-release.zip application/zip
+          args: ./ns-release.zip application/zip
         env:
           GITHUB_TOKEN: ${{ secrets.NS_ACTION }}
