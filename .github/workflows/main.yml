@@ -22,17 +22,54 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      # Atmosphere
       - name: Get latest release of Atmosphere
         uses: rez0n/actions-github-release@main
         id: atmosphere_release
         env:
           repository: "ELY3M/Atmosphere"
           type: "stable"
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
+      
+      - name: Download and unzip Atmosphere
+        uses: actions/schmiddim-wget-unzip@v1
+        id: unzip_atmosphere
+        with:
+          url: ${{ steps.atmosphere_release.outputs.browser_download_url }}
+          destination: ns-release
+          
+      # Hekate
+      - name: Get latest release of Hekate
+        uses: rez0n/actions-github-release@main
+        id: hekate_release
+        env:
+          repository: "CTCaer/hekate"
+          type: "stable"
+      
+      - name: Download and unzip Atmosphere
+        uses: actions/schmiddim-wget-unzip@v1
+        id: unzip_hekate
+        with:
+          url: ${{ steps.hekate_release.outputs.browser_download_url }}
+          destination: ns-release
+          
+      # Patches
+      - name: Get latest release of patches
+        uses: rez0n/actions-github-release@main
+        id: patches_release
+        env:
+          repository: "ITotalJustice/patches"
+          type: "stable"
+      
+      - name: Download and unzip Atmosphere
+        uses: actions/schmiddim-wget-unzip@v1
+        id: unzip_patches
+        with:
+          url: ${{ steps.patches_release.outputs.browser_download_url }}
+          destination: ns-release
+          
+      - name: List current files
         run: | 
-          echo Hello, world! ${{ steps.atmosphere_release.outputs.browser_download_url }}
-          wget ${{ steps.atmosphere_release.outputs.browser_download_url }}
+          echo ${{ steps.atmosphere_release.outputs.browser_download_url }}
+          echo ${{ steps.hekate_release.outputs.browser_download_url }}
+          echo ${{ steps.patches_release.outputs.browser_download_url }}
           ls
-        
