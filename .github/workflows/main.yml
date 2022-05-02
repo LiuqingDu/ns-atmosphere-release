@@ -24,7 +24,7 @@ jobs:
     steps:
       # Atmosphere
       - name: Get latest release of Atmosphere
-        uses: rez0n/actions-github-release@main
+        uses: rez0n/actions-github-release@v1.8
         id: atmosphere_release
         env:
           repository: "ELY3M/Atmosphere"
@@ -39,13 +39,13 @@ jobs:
           
       # Hekate
       - name: Get latest release of Hekate
-        uses: rez0n/actions-github-release@main
+        uses: rez0n/actions-github-release@v1.8
         id: hekate_release
         env:
           repository: "CTCaer/hekate"
           type: "stable"
       
-      - name: Download and unzip Atmosphere
+      - name: Download and unzip Hekate
         uses: schmiddim/action-wget-unzip@v2
         id: unzip_hekate
         with:
@@ -54,13 +54,13 @@ jobs:
           
       # Patches
       - name: Get latest release of patches
-        uses: rez0n/actions-github-release@main
+        uses: rez0n/actions-github-release@v1.8
         id: patches_release
         env:
           repository: "ITotalJustice/patches"
           type: "stable"
       
-      - name: Download and unzip Atmosphere
+      - name: Download and unzip patches
         uses: schmiddim/action-wget-unzip@v2
         id: unzip_patches
         with:
@@ -73,3 +73,10 @@ jobs:
           echo ${{ steps.hekate_release.outputs.browser_download_url }}
           echo ${{ steps.patches_release.outputs.browser_download_url }}
           ls
+          
+      - name: Upload to release
+        uses: JasonEtco/upload-to-release@master
+        with:
+          args: my-image.tar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
