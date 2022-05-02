@@ -29,17 +29,6 @@ jobs:
         env:
           repository: "ELY3M/Atmosphere"
           type: "stable"
-      
-      - name: Download and unzip Atmosphere
-        uses: schmiddim/action-wget-unzip@v2
-        id: unzip_atmosphere
-        with:
-          url: ${{ steps.atmosphere_release.outputs.browser_download_url }}
-          destination: ns-release
-          
-      - name: Zip all files
-        run: | 
-          ls ns-release
           
       # Hekate
       - name: Get latest release of Hekate
@@ -48,17 +37,6 @@ jobs:
         env:
           repository: "CTCaer/hekate"
           type: "stable"
-      
-      - name: Download and unzip Hekate
-        uses: schmiddim/action-wget-unzip@v2
-        id: unzip_hekate
-        with:
-          url: ${{ steps.hekate_release.outputs.browser_download_url }}
-          destination: ns-release
-          
-      - name: Zip all files
-        run: | 
-          ls ns-release
           
       # Patches
       - name: Get latest release of patches
@@ -67,23 +45,17 @@ jobs:
         env:
           repository: "ITotalJustice/patches"
           type: "stable"
-      
-      - name: Download and unzip patches
-        uses: schmiddim/action-wget-unzip@v2
-        id: unzip_patches
-        with:
-          url: ${{ steps.patches_release.outputs.browser_download_url }}
-          destination: ns-release
           
       - name: Zip all files
         run: | 
+          wget -O atmosphere.zip ${{ steps.atmosphere_release.outputs.browser_download_url }}
+          wget -O hekate.zip ${{ steps.hekate_release.outputs.browser_download_url }}
+          wget -O patches.zip ${{ steps.patches_release.outputs.browser_download_url }}
+          mkdir ns-release
+          unzip -d ns-release atmosphere.zip
+          unzip -d ns-release hekate.zip
+          unzip -d ns-release patches.zip
           ls ns-release
-          
-      - name: Zip all files
-        run: | 
-          echo ${{ steps.atmosphere_release.outputs.browser_download_url }}
-          echo ${{ steps.hekate_release.outputs.browser_download_url }}
-          echo ${{ steps.patches_release.outputs.browser_download_url }}
           zip -qr ns-release.zip ns-release
           touch CHANGELOG.log
           echo "Atmosphere - ${{ steps.atmosphere_release.outputs.release }}">>CHANGELOG.log
