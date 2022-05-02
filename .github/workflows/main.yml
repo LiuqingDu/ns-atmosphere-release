@@ -72,15 +72,23 @@ jobs:
           echo ${{ steps.atmosphere_release.outputs.browser_download_url }}
           echo ${{ steps.hekate_release.outputs.browser_download_url }}
           echo ${{ steps.patches_release.outputs.browser_download_url }}
-        #  tar -cf ns-release.tar ns-release/
-        #  ls
+          zip -qr ns-release.zip ns-release
+          ls
           
-      - name: Upload to release
-        uses: fnkr/github-action-ghr@v1.3
-        env:
-          GHR_COMPRESS: zip
-          GHR_PATH: ns-release/
-          GITHUB_TOKEN: ${{ secrets.NS_ACTION }}
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.NS_ACTION }}"
+          automatic_release_tag: "latest"
+          title: "Development Build"
+          files: |
+            ns-release.zip
+          
+      #- name: Upload to release
+      #  uses: fnkr/github-action-ghr@v1.3
+      #  env:
+      #    GHR_COMPRESS: zip
+      #    GHR_PATH: ns-release/
+      #    GITHUB_TOKEN: ${{ secrets.NS_ACTION }}
           
       #- name: Upload to release
       #  uses: JasonEtco/upload-to-release@v0.1.1
