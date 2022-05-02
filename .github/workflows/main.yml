@@ -67,7 +67,7 @@ jobs:
           url: ${{ steps.patches_release.outputs.browser_download_url }}
           destination: ns-release
           
-      - name: List current files
+      - name: Zip all files
         run: | 
           echo ${{ steps.atmosphere_release.outputs.browser_download_url }}
           echo ${{ steps.hekate_release.outputs.browser_download_url }}
@@ -75,24 +75,12 @@ jobs:
           zip -qr ns-release.zip ns-release
           ls
           
-      - uses: "marvinpinto/action-automatic-releases@latest"
+      - name: GH Release
+        uses: softprops/action-gh-release@v0.1.14
         with:
-          repo_token: "${{ secrets.NS_ACTION }}"
-          automatic_release_tag: "latest"
-          title: "Development Build"
+          token: ${{ secrets.NS_ACTION }}
+          tag_name: latest
+          name: Development Build
+          body: Atmosphere - ${{ steps.atmosphere_release.outputs.release }}, Hekate - ${{ steps.hekate_release.outputs.release }}, Patches - ${{ steps.patches_release.outputs.release }}
           files: |
             ns-release.zip
-          
-      #- name: Upload to release
-      #  uses: fnkr/github-action-ghr@v1.3
-      #  env:
-      #    GHR_COMPRESS: zip
-      #    GHR_PATH: ns-release/
-      #    GITHUB_TOKEN: ${{ secrets.NS_ACTION }}
-          
-      #- name: Upload to release
-      #  uses: JasonEtco/upload-to-release@v0.1.1
-      #  with:
-      #    args: ns-release.tar
-      #  env:
-      #    GITHUB_TOKEN: ${{ secrets.NS_ACTION }}
