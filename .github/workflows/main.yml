@@ -73,10 +73,11 @@ jobs:
           echo ${{ steps.hekate_release.outputs.browser_download_url }}
           echo ${{ steps.patches_release.outputs.browser_download_url }}
           ls
+          zip -r ns-release ns-release.zip
           
       - name: Upload to release
         uses: JasonEtco/upload-to-release@master
         with:
-          args: my-image.tar
+          args: ns-release.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
