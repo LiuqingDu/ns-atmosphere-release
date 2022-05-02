@@ -37,6 +37,10 @@ jobs:
           url: ${{ steps.atmosphere_release.outputs.browser_download_url }}
           destination: ns-release
           
+      - name: Zip all files
+        run: | 
+          ls ns-release
+          
       # Hekate
       - name: Get latest release of Hekate
         uses: rez0n/actions-github-release@v1.8
@@ -52,6 +56,10 @@ jobs:
           url: ${{ steps.hekate_release.outputs.browser_download_url }}
           destination: ns-release
           
+      - name: Zip all files
+        run: | 
+          ls ns-release
+          
       # Patches
       - name: Get latest release of patches
         uses: rez0n/actions-github-release@v1.8
@@ -66,6 +74,10 @@ jobs:
         with:
           url: ${{ steps.patches_release.outputs.browser_download_url }}
           destination: ns-release
+          
+      - name: Zip all files
+        run: | 
+          ls ns-release
           
       - name: Zip all files
         run: | 
