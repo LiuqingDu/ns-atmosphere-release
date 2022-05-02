@@ -72,12 +72,19 @@ jobs:
           echo ${{ steps.atmosphere_release.outputs.browser_download_url }}
           echo ${{ steps.hekate_release.outputs.browser_download_url }}
           echo ${{ steps.patches_release.outputs.browser_download_url }}
-          tar -cf ns-release.tar ns-release/
-          ls
+        #  tar -cf ns-release.tar ns-release/
+        #  ls
           
       - name: Upload to release
-        uses: JasonEtco/upload-to-release@v0.1.1
-        with:
-          args: ns-release.tar
+        uses: fnkr/github-action-ghr@v1.3
         env:
+          GHR_COMPRESS: zip
+          GHR_PATH: ns-release/
           GITHUB_TOKEN: ${{ secrets.NS_ACTION }}
+          
+      #- name: Upload to release
+      #  uses: JasonEtco/upload-to-release@v0.1.1
+      #  with:
+      #    args: ns-release.tar
+      #  env:
+      #    GITHUB_TOKEN: ${{ secrets.NS_ACTION }}
