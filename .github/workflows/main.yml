@@ -52,9 +52,9 @@ jobs:
           wget -O hekate.zip ${{ steps.hekate_release.outputs.browser_download_url }}
           wget -O patches.zip ${{ steps.patches_release.outputs.browser_download_url }}
           mkdir ns-release
-          unzip -d ns-release atmosphere.zip
-          unzip -d ns-release hekate.zip -n
-          unzip -d ns-release patches.zip -o
+          unzip atmosphere.zip -d ns-release
+          unzip -n hekate.zip -d ns-release
+          unzip -o patches.zip -d ns-release
           ls ns-release
           zip -qr ns-release.zip ns-release
           touch CHANGELOG.log
