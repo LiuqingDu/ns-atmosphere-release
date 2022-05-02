@@ -56,7 +56,7 @@ jobs:
           unzip -n hekate.zip -d ns-release
           unzip -o patches.zip -d ns-release
           ls ns-release
-          zip -qr ns-release.zip ns-release
+          zip -qr ns-release.zip ns-release/*
           touch CHANGELOG.log
           echo "Atmosphere - ${{ steps.atmosphere_release.outputs.release }}">>CHANGELOG.log
           echo "Hekate - ${{ steps.hekate_release.outputs.release }}">>CHANGELOG.log
