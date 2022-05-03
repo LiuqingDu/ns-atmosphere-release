@@ -28,6 +28,7 @@ jobs:
           mkdir ns-release
           mkdir overlays
           mkdir contents
+          mkdir switch
           touch CHANGELOG.md
 
       # Atmosphere
@@ -70,6 +71,15 @@ jobs:
           repository: XorTroll/emuiibo
           type: latest
 
+      # EdiZon
+      - name: Get latest release of EdiZon
+        uses: andy-v-h/get-release-asset-action@v1.1.0
+        id: EdiZon_release
+        with:
+          repo: WerWolv/EdiZon
+          match: EdiZon.nro
+          rename: switch/EdiZon/EdiZon.nro
+
       # ovlEdiZon
       - name: Get latest release of ovlEdiZon
         uses: andy-v-h/get-release-asset-action@v1.1.0
@@ -103,11 +113,11 @@ jobs:
       - name: Wget and unzip overlays
         run: |
           wget -O tesla-menu.zip ${{ steps.teslaMenu_release.outputs.browser_download_url }}
-          unzip tesla-menu.zip switch/.overlays/ovlmenu.ovl -d overlays
+          unzip tesla-menu.zip switch/.overlays/ovlmenu.ovl -d overlays -j
           rm tesla-menu.zip
           wget -O emuiibo.zip ${{ steps.emuiibo_release.outputs.browser_download_url }}
-          unzip emuiibo.zip SdOut/switch/.overlays/emuiibo.ovl -d overlays
-          unzip emuiibo.zip SdOut/atmosphere/contents/ -d contents
+          unzip emuiibo.zip SdOut/switch/.overlays/emuiibo.ovl -d overlays -j
+          unzip emuiibo.zip SdOut/atmosphere/contents/ -d contents -j
           rm emuiibo.zip
 
       # Checkout custom files
@@ -123,6 +133,7 @@ jobs:
           cp -rf git/[!.]* ns-release
           mv ns-release/hekate_ctcaer*.bin ns-release/payload.bin
           mv overlays ns-release/switch/.overlays
+          mv contents ns-release/atmosphere/
 
       # Zip all files
       - name: Zip all files
