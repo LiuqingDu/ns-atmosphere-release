@@ -26,9 +26,6 @@ jobs:
       - name: Preparing
         run: |
           mkdir ns-release
-          mkdir overlays
-          mkdir contents
-          mkdir switch/EdiZon -p
           touch CHANGELOG.md
 
       # Atmosphere
@@ -55,49 +52,6 @@ jobs:
           repository: ITotalJustice/patches
           type: latest
 
-      # Tesla-Menu
-      - name: Get latest release of Tesla-Menu
-        uses: rez0n/actions-github-release@v1.8
-        id: teslaMenu_release
-        env:
-          repository: WerWolv/Tesla-Menu
-          type: latest
-
-      # Emuiibo
-      - name: Get latest release of emuiibo
-        uses: rez0n/actions-github-release@v1.8
-        id: emuiibo_release
-        env:
-          repository: XorTroll/emuiibo
-          type: latest
-
-      # EdiZon
-      - name: Get latest release of EdiZon
-        uses: andy-v-h/get-release-asset-action@v1.1.0
-        id: EdiZon_release
-        with:
-          repo: WerWolv/EdiZon
-          match: EdiZon.nro
-          rename: switch/EdiZon/EdiZon.nro
-
-      # ovlEdiZon
-      - name: Get latest release of ovlEdiZon
-        uses: andy-v-h/get-release-asset-action@v1.1.0
-        id: ovlEdiZon_release
-        with:
-          repo: WerWolv/EdiZon
-          match: ovlEdiZon.ovl
-          rename: overlays/ovlEdiZon.ovl
-
-      # ovlSysmodules
-      - name: Get latest release of ovlSysmodules
-        uses: andy-v-h/get-release-asset-action@v1.1.0
-        id: ovlSysmodules_release
-        with:
-          repo: WerWolv/ovl-sysmodules
-          match: ovlSysmodules.ovl
-          rename: overlays/ovlSysmodules.ovl
-
       # Get release and unzip archives
       - name: Wget and unzip archives
         run: |
@@ -108,17 +62,6 @@ jobs:
           unzip -n hekate.zip -d ns-release
           unzip -o patches.zip -d ns-release
           rm atmosphere.zip hekate.zip patches.zip
-
-      # Get release and unzip overlays
-      - name: Wget and unzip overlays
-        run: |
-          wget -O tesla-menu.zip ${{ steps.teslaMenu_release.outputs.browser_download_url }}
-          unzip -j tesla-menu.zip switch/.overlays/ovlmenu.ovl -d overlays
-          rm tesla-menu.zip
-          wget -O emuiibo.zip ${{ steps.emuiibo_release.outputs.browser_download_url }}
-          unzip -j emuiibo.zip SdOut/switch/.overlays/emuiibo.ovl -d overlays
-          unzip -j emuiibo.zip SdOut/atmosphere/contents/ -d contents
-          rm emuiibo.zip
 
       # Checkout custom files
       - name: Checkout custom files
@@ -132,9 +75,69 @@ jobs:
         run: |
           cp -rf git/[!.]* ns-release
           mv ns-release/hekate_ctcaer*.bin ns-release/payload.bin
-          mv overlays ns-release/switch/.overlays
-          mv -rf contents/* ns-release/atmosphere/contents
-          mv -rf switch/* ns-release/switch
+          mkdir ns-release/switch/.overlays
+
+      # Tesla-Menu
+      - name: Get latest release of Tesla-Menu
+        uses: rez0n/actions-github-release@v1.8
+        id: teslaMenu_release
+        env:
+          repository: WerWolv/Tesla-Menu
+          type: latest
+      - name: Wget and unzip Tesla-Menu
+        run: |
+          wget -O tesla-menu.zip ${{ steps.teslaMenu_release.outputs.browser_download_url }}
+          unzip -j tesla-menu.zip switch/.overlays/ovlmenu.ovl -d ns-release/switch/.overlays
+          rm tesla-menu.zip
+
+      # EdiZon
+      - name: Preparing EdiZon
+        run: |
+          mkdir ns-release/switch/EdiZon
+      - name: Get latest release of EdiZon
+        uses: andy-v-h/get-release-asset-action@v1.1.0
+        id: EdiZon_release
+        with:
+          repo: WerWolv/EdiZon
+          match: EdiZon.nro
+          rename: ns-release/switch/EdiZon/EdiZon.nro
+
+      # ovlEdiZon
+      - name: Get latest release of ovlEdiZon
+        uses: andy-v-h/get-release-asset-action@v1.1.0
+        id: ovlEdiZon_release
+        with:
+          repo: WerWolv/EdiZon
+          match: ovlEdiZon.ovl
+          rename: ns-release/switch/.overlays/ovlEdiZon.ovl
+
+      # ovlSysmodules
+      - name: Get latest release of ovlSysmodules
+        uses: andy-v-h/get-release-asset-action@v1.1.0
+        id: ovlSysmodules_release
+        with:
+          repo: WerWolv/ovl-sysmodules
+          match: ovlSysmodules.ovl
+          rename: ns-release/switch/.overlays/ovlSysmodules.ovl
+
+      # Emuiibo
+      - name: Get latest release of emuiibo
+        uses: rez0n/actions-github-release@v1.8
+        id: emuiibo_release
+        env:
+          repository: XorTroll/emuiibo
+          type: latest
+      - name: Wget and unzip emuiibo
+        run: |
+          wget -O emuiibo.zip ${{ steps.emuiibo_release.outputs.browser_download_url }}
+          unzip -j emuiibo.zip SdOut/switch/.overlays/emuiibo.ovl -d ns-release/switch/.overlays
+          unzip -j emuiibo.zip SdOut/atmosphere/contents/ -d ns-release/atmosphere/contents
+          rm emuiibo.zip
+
+      # Merge files
+      - name: Merge files
+        run: |
+          ls
 
       # Zip all files
       - name: Zip all files
