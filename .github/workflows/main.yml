@@ -143,7 +143,7 @@ jobs:
       - name: Wget and unzip AtmoXL-Titel-Installer
         run: |
           wget -O atmoxl.zip ${{ steps.atmoxl_release.outputs.browser_download_url }}
-          unzip atmoxl.zip ns-release/
+          unzip atmoxl.zip -d ns-release
           rm atmoxl.zip
 
       # DBI
