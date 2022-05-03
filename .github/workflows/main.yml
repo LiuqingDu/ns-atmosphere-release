@@ -71,7 +71,7 @@ jobs:
       # Move files
       - name: Move files
         run: |
-          cp -ro git/[!.]* ns-release
+          cp -rf git/[!.]* ns-release
           mv ns-release/hekate_ctcaer*.bin ns-release/payload.bin
 
       - name: Zip all files
