@@ -61,6 +61,7 @@ jobs:
         with:
           repo: WerWolv/EdiZon
           match: ovlEdiZon.ovl
+          rename: ovlEdiZon.ovl
 
       # Preparing
       - name: Preparing
