@@ -75,7 +75,7 @@ jobs:
         run: |
           cp -rf git/[!.]* ns-release
           mv ns-release/hekate_ctcaer*.bin ns-release/payload.bin
-          mkdir ns-release/switch/.overlays
+          mkdir -p ns-release/switch/.overlays
 
       # Tesla-Menu
       - name: Get latest release of Tesla-Menu
@@ -96,7 +96,6 @@ jobs:
           mkdir ns-release/switch/EdiZon
       - name: Get latest release of EdiZon
         uses: andy-v-h/get-release-asset-action@v1.1.0
-        id: EdiZon_release
         with:
           repo: WerWolv/EdiZon
           match: EdiZon.nro
@@ -105,7 +104,6 @@ jobs:
       # ovlEdiZon
       - name: Get latest release of ovlEdiZon
         uses: andy-v-h/get-release-asset-action@v1.1.0
-        id: ovlEdiZon_release
         with:
           repo: WerWolv/EdiZon
           match: ovlEdiZon.ovl
@@ -114,7 +112,6 @@ jobs:
       # ovlSysmodules
       - name: Get latest release of ovlSysmodules
         uses: andy-v-h/get-release-asset-action@v1.1.0
-        id: ovlSysmodules_release
         with:
           repo: WerWolv/ovl-sysmodules
           match: ovlSysmodules.ovl
@@ -135,6 +132,77 @@ jobs:
           mv SdOut/atmosphere/contents/* ns-release/atmosphere/contents
           rm -rf SdOut
           rm emuiibo.zip
+
+      # AtmoXL-Titel-Installer
+      - name: Get latest release of AtmoXL-Titel-Installer
+        uses: rez0n/actions-github-release@v1.8
+        id: atmoxl_release
+        env:
+          repository: dezem/AtmoXL-Titel-Installer
+          type: latest
+      - name: Wget and unzip AtmoXL-Titel-Installer
+        run: |
+          wget -O atmoxl.zip ${{ steps.atmoxl_release.outputs.browser_download_url }}
+          unzip atmoxl.zip ns-release/
+          rm atmoxl.zip
+
+      # DBI
+      - name: Preparing DBI
+        run: |
+          mkdir ns-release/switch/DBI
+      - name: Get latest release of DBI
+        uses: andy-v-h/get-release-asset-action@v1.1.0
+        with:
+          repo: rashevskyv/dbi
+          match: DBI.nro
+          rename: ns-release/switch/DBI/DBI.nro
+
+      # DeepSea-Toolbox
+      - name: Preparing DeepSea-Toolbox
+        run: |
+          mkdir ns-release/switch/DeepSea-Toolbox
+      - name: Get latest release of DeepSea-Toolbox
+        uses: andy-v-h/get-release-asset-action@v1.1.0
+        with:
+          repo: Team-Neptune/DeepSea-Toolbox
+          match: DeepSeaToolbox.nro
+          rename: ns-release/switch/DeepSea-Toolbox/DeepSeaToolbox.nro
+
+      # JKSV
+      - name: Preparing JKSV
+        run: |
+          mkdir ns-release/switch/JKSV
+      - name: Get latest release of JKSV
+        uses: andy-v-h/get-release-asset-action@v1.1.0
+        with:
+          repo: J-D-K/JKSV
+          match: JKSV.nro
+          rename: ns-release/switch/JKSV/JKSV.nro
+
+      # linkalho
+      - name: Get latest release of linkalho
+        uses: rez0n/actions-github-release@v1.8
+        id: linkalho_release
+        env:
+          repository: rdmrocha/linkalho
+          type: latest
+      - name: Wget and unzip linkalho
+        run: |
+          wget -O linkalho.zip ${{ steps.linkalho_release.outputs.browser_download_url }}
+          mkdir ns-release/switch/linkalho
+          unzip linkalho.zip ns-release/switch/linkalho
+          rm linkalho.zip
+
+      # Switch-90DNS-Tester
+      - name: Preparing Switch-90DNS-Tester
+        run: |
+          mkdir ns-release/switch/Switch-90DNS-Tester
+      - name: Get latest release of Switch-90DNS-Tester
+        uses: andy-v-h/get-release-asset-action@v1.1.0
+        with:
+          repo: meganukebmp/Switch_90DNS_tester
+          match: Switch_90DNS_tester.nro
+          rename: ns-release/switch/Switch-90DNS-Tester/Switch_90DNS_tester.nro
 
       # Merge files
       - name: Merge files
