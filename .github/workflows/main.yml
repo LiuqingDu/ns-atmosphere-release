@@ -133,8 +133,8 @@ jobs:
           cp -rf git/[!.]* ns-release
           mv ns-release/hekate_ctcaer*.bin ns-release/payload.bin
           mv overlays ns-release/switch/.overlays
-          mv contents/* ns-release/atmosphere/contents
-          mv switch/* ns-release/switch
+          mv -rf contents/* ns-release/atmosphere/contents
+          mv -rf switch/* ns-release/switch
 
       # Zip all files
       - name: Zip all files
