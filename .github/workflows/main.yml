@@ -113,11 +113,11 @@ jobs:
       - name: Wget and unzip overlays
         run: |
           wget -O tesla-menu.zip ${{ steps.teslaMenu_release.outputs.browser_download_url }}
-          unzip tesla-menu.zip switch/.overlays/ovlmenu.ovl -d overlays -j
+          unzip -j tesla-menu.zip switch/.overlays/ovlmenu.ovl -d overlays
           rm tesla-menu.zip
           wget -O emuiibo.zip ${{ steps.emuiibo_release.outputs.browser_download_url }}
-          unzip emuiibo.zip SdOut/switch/.overlays/emuiibo.ovl -d overlays -j
-          unzip emuiibo.zip SdOut/atmosphere/contents/ -d contents -j
+          unzip -j emuiibo.zip SdOut/switch/.overlays/emuiibo.ovl -d overlays
+          unzip -j emuiibo.zip SdOut/atmosphere/contents/ -d contents
           rm emuiibo.zip
 
       # Checkout custom files
