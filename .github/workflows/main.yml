@@ -22,6 +22,14 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      # Preparing
+      - name: Preparing
+        run: |
+          mkdir ns-release
+          mkdir overlays
+          mkdir contents
+          touch CHANGELOG.md
+
       # Atmosphere
       - name: Get latest release of Atmosphere
         uses: rez0n/actions-github-release@v1.8
@@ -49,26 +57,36 @@ jobs:
       # Tesla-Menu
       - name: Get latest release of Tesla-Menu
         uses: rez0n/actions-github-release@v1.8
-        id: tesla-menu_release
+        id: teslaMenu_release
         env:
           repository: WerWolv/Tesla-Menu
           type: stable
 
-      # EdiZon
-      - name: Get latest release of EdiZon
+      # Emuiibo
+      - name: Get latest release of emuiibo
+        uses: rez0n/actions-github-release@v1.8
+        id: emuiibo_release
+        env:
+          repository: XorTroll/emuiibo
+          type: stable
+
+      # ovlEdiZon
+      - name: Get latest release of ovlEdiZon
         uses: andy-v-h/get-release-asset-action@v1.1.0
-        id: edizon_release
+        id: ovlEdiZon_release
         with:
           repo: WerWolv/EdiZon
           match: ovlEdiZon.ovl
-          rename: ovlEdiZon.ovl
+          rename: overlays/ovlEdiZon.ovl
 
-      # Preparing
-      - name: Preparing
-        run: |
-          mkdir ns-release
-          mkdir overlays
-          touch CHANGELOG.md
+      # ovlSysmodules
+      - name: Get latest release of ovlSysmodules
+        uses: andy-v-h/get-release-asset-action@v1.1.0
+        id: ovlSysmodules_release
+        with:
+          repo: WerWolv/ovl-sysmodules
+          match: ovlSysmodules.ovl
+          rename: overlays/ovlSysmodules.ovl
 
       # Get release and unzip archives
       - name: Wget and unzip archives
@@ -84,10 +102,13 @@ jobs:
       # Get release and unzip overlays
       - name: Wget and unzip overlays
         run: |
-          wget -O tesla-menu.zip ${{ steps.tesla-menu_release.outputs.browser_download_url }}
-          unzip tesla-menu.zip -d overlays
+          wget -O tesla-menu.zip ${{ steps.teslaMenu_release.outputs.browser_download_url }}
+          unzip tesla-menu.zip switch/.overlays/ovlmenu.ovl -d overlays
           rm tesla-menu.zip
-          ls
+          wget -O emuiibo.zip ${{ steps.emuiibo_release.outputs.browser_download_url }}
+          unzip emuiibo.zip SdOut/switch/.overlays/emuiibo.ovl -d overlays
+          unzip emuiibo.zip SdOut/atmosphere/contents/ -d contents
+          rm emuiibo.zip
 
       # Checkout custom files
       - name: Checkout custom files
@@ -101,6 +122,7 @@ jobs:
         run: |
           cp -rf git/[!.]* ns-release
           mv ns-release/hekate_ctcaer*.bin ns-release/payload.bin
+          mv overlays ns-release/switch/.overlays
 
       # Zip all files
       - name: Zip all files
