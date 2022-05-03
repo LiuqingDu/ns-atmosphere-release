@@ -190,7 +190,7 @@ jobs:
         run: |
           wget -O linkalho.zip ${{ steps.linkalho_release.outputs.browser_download_url }}
           mkdir ns-release/switch/linkalho
-          unzip linkalho.zip ns-release/switch/linkalho
+          unzip linkalho.zip -d ns-release/switch/linkalho
           rm linkalho.zip
 
       # Switch-90DNS-Tester
