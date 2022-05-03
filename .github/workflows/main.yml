@@ -76,7 +76,9 @@ jobs:
 
       - name: Zip all files
         run: |
-          zip -qrD ns-release.zip ns-release/*
+          cd ns-release
+          zip -qr ../ns-release.zip *
+          cd ..
           echo "Atmosphere - ${{ steps.atmosphere_release.outputs.release }}">>CHANGELOG.md
           echo "Hekate - ${{ steps.hekate_release.outputs.release }}">>CHANGELOG.md
           echo "Patches - ${{ steps.patches_release.outputs.release }}">>CHANGELOG.md
