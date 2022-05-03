@@ -36,7 +36,7 @@ jobs:
         id: atmosphere_release
         env:
           repository: ELY3M/Atmosphere
-          type: stable
+          type: latest
 
       # Hekate
       - name: Get latest release of Hekate
@@ -44,7 +44,7 @@ jobs:
         id: hekate_release
         env:
           repository: CTCaer/hekate
-          type: stable
+          type: latest
 
       # Patches
       - name: Get latest release of patches
@@ -52,7 +52,7 @@ jobs:
         id: patches_release
         env:
           repository: ITotalJustice/patches
-          type: stable
+          type: latest
 
       # Tesla-Menu
       - name: Get latest release of Tesla-Menu
@@ -60,7 +60,7 @@ jobs:
         id: teslaMenu_release
         env:
           repository: WerWolv/Tesla-Menu
-          type: stable
+          type: latest
 
       # Emuiibo
       - name: Get latest release of emuiibo
@@ -68,7 +68,7 @@ jobs:
         id: emuiibo_release
         env:
           repository: XorTroll/emuiibo
-          type: stable
+          type: latest
 
       # ovlEdiZon
       - name: Get latest release of ovlEdiZon
