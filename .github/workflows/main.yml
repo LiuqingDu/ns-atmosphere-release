@@ -56,11 +56,11 @@ jobs:
 
       # EdiZon
       - name: Get latest release of EdiZon
-        uses: rez0n/actions-github-release@v1.8
+        uses: andy-v-h/get-release-asset-action@v1.1.0
         id: edizon_release
         env:
-          repository: WerWolv/EdiZon
-          type: stable
+          repo: WerWolv/EdiZon
+          match: ovlEdiZon.ovl
 
       # Preparing
       - name: Preparing
@@ -85,10 +85,8 @@ jobs:
         run: |
           wget -O tesla-menu.zip ${{ steps.tesla-menu_release.outputs.browser_download_url }}
           unzip tesla-menu.zip -d overlays
-          echo ${{ steps.edizon_release.outputs.browser_download_url }}
-          wget -O edizon.zip ${{ steps.edizon_release.outputs.browser_download_url }}
-          unzip edizon.zip -d overlays
-          rm tesla-menu.zip edizon.zip
+          rm tesla-menu.zip
+          ls
 
       # Checkout custom files
       - name: Checkout custom files
