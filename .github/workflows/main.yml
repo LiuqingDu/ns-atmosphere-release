@@ -58,7 +58,7 @@ jobs:
       - name: Get latest release of EdiZon
         uses: andy-v-h/get-release-asset-action@v1.1.0
         id: edizon_release
-        env:
+        with:
           repo: WerWolv/EdiZon
           match: ovlEdiZon.ovl
 
