@@ -27,31 +27,49 @@ jobs:
         uses: rez0n/actions-github-release@v1.8
         id: atmosphere_release
         env:
-          repository: "ELY3M/Atmosphere"
-          type: "stable"
+          repository: ELY3M/Atmosphere
+          type: stable
 
       # Hekate
       - name: Get latest release of Hekate
         uses: rez0n/actions-github-release@v1.8
         id: hekate_release
         env:
-          repository: "CTCaer/hekate"
-          type: "stable"
+          repository: CTCaer/hekate
+          type: stable
 
       # Patches
       - name: Get latest release of patches
         uses: rez0n/actions-github-release@v1.8
         id: patches_release
         env:
-          repository: "ITotalJustice/patches"
-          type: "stable"
+          repository: ITotalJustice/patches
+          type: stable
+
+      # Tesla-Menu
+      - name: Get latest release of Tesla-Menu
+        uses: rez0n/actions-github-release@v1.8
+        id: tesla-menu_release
+        env:
+          repository: WerWolv/Tesla-Menu
+          type: stable
+
+      # EdiZon
+      - name: Get latest release of EdiZon
+        uses: rez0n/actions-github-release@v1.8
+        id: edizon_release
+        env:
+          repository: WerWolv/EdiZon
+          type: stable
 
       # Preparing
       - name: Preparing
         run: |
           mkdir ns-release
+          mkdir overlays
           touch CHANGELOG.md
 
+      # Get release and unzip archives
       - name: Wget and unzip archives
         run: |
           wget -O atmosphere.zip ${{ steps.atmosphere_release.outputs.browser_download_url }}
@@ -62,18 +80,30 @@ jobs:
           unzip -o patches.zip -d ns-release
           rm atmosphere.zip hekate.zip patches.zip
 
-      - name: Checkout
+      # Get release and unzip overlays
+      - name: Wget and unzip overlays
+        run: |
+          wget -O tesla-menu.zip ${{ steps.tesla-menu_release.outputs.browser_download_url }}
+          unzip tesla-menu.zip -d overlays
+          echo ${{ steps.edizon_release.outputs.browser_download_url }}
+          wget -O edizon.zip ${{ steps.edizon_release.outputs.browser_download_url }}
+          unzip edizon.zip -d overlays
+          rm tesla-menu.zip edizon.zip
+
+      # Checkout custom files
+      - name: Checkout custom files
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.NS_ACTION }}
           path: git
 
-      # Move files
-      - name: Move files
+      # Merge files
+      - name: Merge files
         run: |
           cp -rf git/[!.]* ns-release
           mv ns-release/hekate_ctcaer*.bin ns-release/payload.bin
 
+      # Zip all files
       - name: Zip all files
         run: |
           cd ns-release
@@ -84,6 +114,7 @@ jobs:
           echo "Patches - ${{ steps.patches_release.outputs.release }}">>CHANGELOG.md
           ls
 
+      # Build and upload
       - name: GH Release
         uses: softprops/action-gh-release@v0.1.14
         with:
