@@ -131,7 +131,7 @@ jobs:
         run: |
           wget -O emuiibo.zip ${{ steps.emuiibo_release.outputs.browser_download_url }}
           unzip -j emuiibo.zip SdOut/switch/.overlays/emuiibo.ovl -d ns-release/switch/.overlays
-          unzip emuiibo.zip SdOut/atmosphere/contents
+          unzip emuiibo.zip SdOut/atmosphere/contents -d ./
           mv SdOut/atmosphere/contents/* ns-release/atmosphere/contents
           rm -rf SdOut
           rm emuiibo.zip
