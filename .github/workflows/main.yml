@@ -6,9 +6,9 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -29,7 +29,7 @@ jobs:
         env:
           repository: "ELY3M/Atmosphere"
           type: "stable"
-          
+
       # Hekate
       - name: Get latest release of Hekate
         uses: rez0n/actions-github-release@v1.8
@@ -37,7 +37,7 @@ jobs:
         env:
           repository: "CTCaer/hekate"
           type: "stable"
-          
+
       # Patches
       - name: Get latest release of patches
         uses: rez0n/actions-github-release@v1.8
@@ -45,40 +45,49 @@ jobs:
         env:
           repository: "ITotalJustice/patches"
           type: "stable"
-          
-      - name: Wget files
-        run: | 
+
+      # Preparing
+      - name: Preparing
+        run: |
+          mkdir ns-release
+          touch CHANGELOG.md
+
+      - name: Wget and unzip archives
+        run: |
           wget -O atmosphere.zip ${{ steps.atmosphere_release.outputs.browser_download_url }}
           wget -O hekate.zip ${{ steps.hekate_release.outputs.browser_download_url }}
           wget -O patches.zip ${{ steps.patches_release.outputs.browser_download_url }}
-          unzip atmosphere.zip
-          unzip -n hekate.zip
-          unzip -o patches.zip
-          rm *.zip
-          
+          unzip atmosphere.zip -d ns-release
+          unzip -n hekate.zip -d ns-release
+          unzip -o patches.zip -d ns-release
+          rm atmosphere.zip hekate.zip patches.zip
+
       - name: Checkout
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.NS_ACTION }}
           path: git
 
+      # Move files
+      - name: Move files
+        run: |
+          cp -ro git/[!.]* ns-release
+          mv ns-release/hekate_ctcaer*.bin ns-release/payload.bin
+
       - name: Zip all files
-        run: | 
-          mv hekate_ctcaer*.bin payload.bin
-          zip -qr ns-release.zip ./*
-          touch CHANGELOG.log
-          echo "Atmosphere - ${{ steps.atmosphere_release.outputs.release }}">>CHANGELOG.log
-          echo "Hekate - ${{ steps.hekate_release.outputs.release }}">>CHANGELOG.log
-          echo "Patches - ${{ steps.patches_release.outputs.release }}">>CHANGELOG.log
+        run: |
+          zip -qr ns-release.zip ns-release/*
+          echo "Atmosphere - ${{ steps.atmosphere_release.outputs.release }}">>CHANGELOG.md
+          echo "Hekate - ${{ steps.hekate_release.outputs.release }}">>CHANGELOG.md
+          echo "Patches - ${{ steps.patches_release.outputs.release }}">>CHANGELOG.md
           ls
-          ls git
-          
+
       - name: GH Release
         uses: softprops/action-gh-release@v0.1.14
         with:
           token: ${{ secrets.NS_ACTION }}
           tag_name: latest
           name: Development Build
-          body_path: CHANGELOG.log
+          body_path: CHANGELOG.md
           files: |
             ns-release.zip
