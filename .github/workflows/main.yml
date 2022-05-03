@@ -28,7 +28,7 @@ jobs:
           mkdir ns-release
           mkdir overlays
           mkdir contents
-          mkdir switch
+          mkdir switch/EdiZon -p
           touch CHANGELOG.md
 
       # Atmosphere
