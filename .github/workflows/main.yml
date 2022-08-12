@@ -45,23 +45,23 @@ jobs:
           type: latest
 
       # Patches
-      - name: Get latest release of patches
-        uses: rez0n/actions-github-release@v1.8
-        id: patches_release
-        env:
-          repository: ITotalJustice/patches
-          type: latest
+      #- name: Get latest release of patches
+      #  uses: rez0n/actions-github-release@v1.8
+      #  id: patches_release
+      #  env:
+      #    repository: ITotalJustice/patches
+      #    type: latest
 
       # Get release and unzip archives
+      #    wget -O patches.zip ${{ steps.patches_release.outputs.browser_download_url }}
+      #    unzip -o patches.zip -d ns-release
       - name: Wget and unzip archives
         run: |
           wget -O atmosphere.zip ${{ steps.atmosphere_release.outputs.browser_download_url }}
           wget -O hekate.zip ${{ steps.hekate_release.outputs.browser_download_url }}
-          wget -O patches.zip ${{ steps.patches_release.outputs.browser_download_url }}
           unzip atmosphere.zip -d ns-release
           unzip -n hekate.zip -d ns-release
-          unzip -o patches.zip -d ns-release
-          rm atmosphere.zip hekate.zip patches.zip
+          rm atmosphere.zip hekate.zip
 
       # Checkout custom files
       - name: Checkout custom files
@@ -210,6 +210,7 @@ jobs:
           ls
 
       # Zip all files
+      #    echo "Patches - ${{ steps.patches_release.outputs.release }}">>CHANGELOG.md
       - name: Zip all files
         run: |
           cd ns-release
@@ -217,7 +218,6 @@ jobs:
           cd ..
           echo "Atmosphere - ${{ steps.atmosphere_release.outputs.release }}">>CHANGELOG.md
           echo "Hekate - ${{ steps.hekate_release.outputs.release }}">>CHANGELOG.md
-          echo "Patches - ${{ steps.patches_release.outputs.release }}">>CHANGELOG.md
           ls
 
       # Build and upload
